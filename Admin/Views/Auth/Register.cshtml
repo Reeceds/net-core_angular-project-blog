@@ -1,0 +1,21 @@
+﻿@model User
+@{
+    ViewData["Title"] = "Register Page";
+}
+
+<h1 class="mb-4">Register</h1>
+
+<form class="col-md-7 col-lg-5 col-12" asp-action="Login" method="post">
+    <div class="mb-3">
+        <label class="mb-2">Username</label>
+        <input class="form-control" asp-for="Username" type="text">
+    </div>
+    <div class="mb-3">
+        <label class="mb-2">Password</label>
+        <input class="form-control" asp-for="Password" type="password">
+    </div>
+    <div class="d-flex flex-row justify-content-between">
+        <a class="btn btn-danger" asp-controller="Home" asp-action="Index">Cancel</a>
+        <button type="submit" class="btn btn-success">Register</button>
+    </div>
+</form>

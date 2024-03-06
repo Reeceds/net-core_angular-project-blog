@@ -1,0 +1,11 @@
+<a class="card mb-5 w-50" routerLink="/post/{{ blogPost?.id }}">
+  <img
+    src="http://localhost:5035/images/{{ blogPost?.currentImage }}"
+    class="card-img-top"
+    alt="http://localhost:5035/images/{{ blogPost?.currentImage }}"
+  />
+  <div class="card-body">
+    <h5 class="card-title">{{ blogPost?.title }}</h5>
+    <p class="card-text truncate">{{ blogPost?.description }}</p>
+  </div>
+</a>

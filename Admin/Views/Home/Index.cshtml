@@ -1,0 +1,24 @@
+﻿@model PostViewModel;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1 class="display-4 mb-4">Dashboard</h1>
+
+<a class="btn btn-success mb-5" asp-controller="Post" asp-action="CreatePostPage">Create Post +</a>
+
+<div class="d-flex flex-wrap">
+    @foreach (var item in Model.Posts)
+    {
+        <div class="card mb-5 mr-5" style="width: 18rem; margin-right: 30px;">
+        <img src="~/images/@item.CurrentImage" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@item.Title</h5>
+            <p class="card-text truncate">@item.Description</p>
+            <a class="btn btn-primary me-2" asp-controller="Post" asp-action="EditPostPage" asp-route-id="@item.Id">Edit</a>
+            <a class="btn btn-danger" asp-controller="Post" asp-action="DeletePost" asp-route-id="@item.Id">Delete</a>
+        </div>
+        </div>
+    }
+</div>

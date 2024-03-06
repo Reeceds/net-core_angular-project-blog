@@ -1,0 +1,18 @@
+<div class="container pt-5">
+  <button class="btn btn-primary mb-5" type="button" (click)="goBack()">
+    <fa-icon class="fa-sm me-2" [icon]="faCehvronLeft"></fa-icon>Back
+  </button>
+  <div class="col-md-8 col-12">
+    <img
+      src="http://localhost:5035/images/{{ clickedPost?.currentImage }}"
+      alt="http://localhost:5035/images/{{ clickedPost?.currentImage }}"
+      style="width: 100%"
+      class="mb-5"
+    />
+    <h1 class="mb-4">{{ clickedPost?.title }}</h1>
+    <p style="font-style: italic; font-size: 0.9rem">
+      {{ clickedPost?.dateCreated }}
+    </p>
+    <p>{{ clickedPost?.description }}</p>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+@model SinglePostViewModel;
+
+@{
+    ViewData["Title"] = "Add Post";
+}
+
+<h1 class="mb-4">Create Post</h1>
+
+<form class="col-md-7 col-lg-5 col-12" asp-controller="Post" asp-action="CreatePost" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label class="mb-2">Title</label>
+        <input class="form-control" asp-for="Title">
+    </div>
+    <div class="mb-3">
+        <label class="mb-2">Description</label>
+        <textarea class="form-control" rows="5" asp-for="Description"></textarea>
+    </div>
+    <div class="mb-4">
+        <label class="mb-2">Image</label>
+        @* Input field is automatically a file uploader becasuse 'CurrentImage' is of type 'IFormFile' *@
+        <input class="form-control" asp-for="CurrentImage">
+    </div>
+    <div class="d-flex flex-row justify-content-between">
+        <a class="btn btn-danger" asp-controller="Home" asp-action="Index">Cancel</a>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </div>
+</form>
