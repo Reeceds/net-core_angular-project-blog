@@ -19,18 +19,17 @@ public class PostController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetAllPosts()
+    public async Task<ActionResult<List<Post>>> GetAllPosts() // IActionResult, use when you don't need to specify what your'e returning. ActionResult is preferred when you want to clearly specify both the data type and the HTTP status code to be returned.
     {
-        var posts = this._context.Posts.ToList();
+        var posts = await this._context.Posts.Include(p => p.Images).ToListAsync();
 
         return Ok(posts);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetPost(int id)
+    public async Task<IActionResult> GetPost(int id)
     {
-        // var post = this._context.Posts.Include(x => x.Images).FirstOrDefault(p => p.Id == id);
-        var post = this._context.Posts.FirstOrDefault(p => p.Id == id);
+        var post = await this._context.Posts.Include(x => x.Images).FirstOrDefaultAsync(p => p.Id == id);
 
         return Ok(post);
     }

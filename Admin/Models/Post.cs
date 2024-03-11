@@ -7,5 +7,5 @@ public class Post
     public string Title { get; set; }
     public string Description { get; set; }
     public DateTime DateCreated { get; set; } = DateTime.UtcNow;
-    public List<Image> Images { get; } = new List<Image>();
+    public List<Image> Images { get; set; } = new List<Image>();
 }

@@ -1,10 +1,15 @@
+using System.Text.Json.Serialization;
 using Admin;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+// ! Add .AddJsonOptions(... when including related table data (.Include()) in API calls to avoid serialization error
+builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 // ! Add this connection string before 'var app = builder.Build();' is run
 builder.Services.AddDbContext<DataContext>(options =>
