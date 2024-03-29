@@ -6,4 +6,5 @@ public class Image
     public string ImageUrl { get; set; }
     public int PostId { get; set; } // Foreign Key
     public Post Post { get; set; } // Reference navigation property
+    public string AppUserId { get; set; }
 }

@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Admin;
 
-public class DataContext : DbContext
+public class DataContext : IdentityDbContext<AppUser>
 {
-    public DbSet<User> Users { get; set; }
+    // public DbSet<AppUser> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Image> Images { get; set; }
 

@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Post } from 'src/app/models/post';
 import { PostService } from 'src/app/services/post.service';
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-post',
@@ -13,7 +13,10 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 })
 export class PostComponent implements OnInit {
   clickedPost: Post | undefined;
-  faCehvronLeft = faChevronLeft;
+  loading: boolean = true;
+
+  faChevronLeft = faChevronLeft;
+  faSpinner = faSpinner;
 
   constructor(
     private _postService: PostService,
@@ -31,6 +34,7 @@ export class PostComponent implements OnInit {
     this._postService.getPost(id).subscribe({
       next: (res) => {
         this.clickedPost = res;
+        this.loading = false;
       },
       error: (err) => {
         console.log(err);

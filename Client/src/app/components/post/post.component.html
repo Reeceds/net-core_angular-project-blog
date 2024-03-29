@@ -1,17 +1,27 @@
-<div class="container pt-5">
+<div *ngIf="loading" class="loading-spinner_container">
+  <fa-icon
+    class="fa-lg fa-spin loading-spinner"
+    [icon]="faSpinner"
+    [spin]="true"
+  ></fa-icon>
+</div>
+
+<div *ngIf="!loading" class="container pt-5">
   <button class="btn btn-primary mb-5" type="button" (click)="goBack()">
-    <fa-icon class="fa-sm me-2" [icon]="faCehvronLeft"></fa-icon>Back
+    <fa-icon class="fa-sm me-2" [icon]="faChevronLeft"></fa-icon>Back
   </button>
-  <div class="col-md-8 col-12">
+  <div class="col-md-8 col-lg-7 col-12">
     <img
       src="http://localhost:5035/images/{{ clickedPost?.currentImage }}"
       alt="http://localhost:5035/images/{{ clickedPost?.currentImage }}"
       style="width: 100%"
-      class="mb-5"
+      class="mb-4"
     />
-    <h1 class="mb-4">{{ clickedPost?.title }}</h1>
-    <p style="font-style: italic; font-size: 0.9rem">
-      {{ clickedPost?.dateCreated }}
+    <h1 class="mb-3">{{ clickedPost?.title }}</h1>
+    <p class="text-secondary" style="font-size: 0.9rem">
+      Created by: <b>{{ clickedPost?.displayName }}</b>
+      <br />
+      Date posted: <b>{{ clickedPost?.dateCreated | date : "dd-MM-yyyy" }}</b>
     </p>
     <p>{{ clickedPost?.description }}</p>
   </div>

@@ -1,7 +1,7 @@
 ﻿namespace Admin;
 using System.Collections.Generic;
 
-public class PostViewModel
+public class PostListVM
 {
     public IEnumerable<Post> Posts { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿@model PostViewModel;
+﻿@model PostListVM;
 
 @{
     ViewData["Title"] = "Home Page";
@@ -12,13 +12,18 @@
     @foreach (var item in Model.Posts)
     {
         <div class="card mb-5 mr-5" style="width: 18rem; margin-right: 30px;">
-        <img src="~/images/@item.CurrentImage" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">@item.Title</h5>
-            <p class="card-text truncate">@item.Description</p>
-            <a class="btn btn-primary me-2" asp-controller="Post" asp-action="EditPostPage" asp-route-id="@item.Id">Edit</a>
-            <a class="btn btn-danger" asp-controller="Post" asp-action="DeletePost" asp-route-id="@item.Id">Delete</a>
-        </div>
+            <div class="car_image-container" style="background-image: url('/images/@item.CurrentImage');">
+                @* <img src="~/images/@item.CurrentImage" class="card-img-top" alt="..."> *@
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">@item.Title</h5>
+                <p class="text-secondary mb-1" style="font-size: 0.75rem">
+                    Last modified: <b>@item.DateCreated</b>
+                </p>
+                <p class="card-text truncate">@item.Description</p>
+                <a class="btn btn-primary me-2" asp-controller="Post" asp-action="EditPostPage" asp-route-id="@item.Id">Edit</a>
+                <a class="btn btn-danger" asp-controller="Post" asp-action="DeletePost" asp-route-id="@item.Id">Delete</a>
+            </div>
         </div>
     }
 </div>

@@ -31,3 +31,9 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.car_image-container {
+    height: 185px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+}

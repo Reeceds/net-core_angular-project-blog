@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -10,12 +13,14 @@ namespace Admin;
 public class PostController : Controller
 {
     private readonly DataContext _context;
-    private readonly IWebHostEnvironment webHostEnvironment;
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly UserManager<AppUser> _userManager;
 
-    public PostController(DataContext context, IWebHostEnvironment webHostEnvironment)
+    public PostController(DataContext context, IWebHostEnvironment webHostEnvironment, UserManager<AppUser> userManager)
     {
         this._context = context;
-        this.webHostEnvironment = webHostEnvironment;
+        this._webHostEnvironment = webHostEnvironment;
+        this._userManager = userManager;
     }
 
     [HttpGet]
@@ -34,6 +39,7 @@ public class PostController : Controller
         return Ok(post);
     }
 
+    [Authorize]
     [HttpGet("create")]
     public IActionResult CreatePostPage()
     {
@@ -41,9 +47,11 @@ public class PostController : Controller
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreatePost([FromForm] SinglePostViewModel _post)
+    public async Task<IActionResult> CreatePost([FromForm] PostVM _post)
     {
         string stringFileName = UploadFile(_post);
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        string displayName = _userManager.GetUserAsync(this.User).Result.DisplayName;
         
         if (string.IsNullOrEmpty(stringFileName))
         {
@@ -52,13 +60,16 @@ public class PostController : Controller
 
         var post = new Post
         {
+            AppUserId = userId,
             Title = _post.Title,
             Description = _post.Description,
             CurrentImage = stringFileName,
+            DisplayName = displayName
         };
 
         post.Images.Add(new Image
         {
+            AppUserId = userId,
             ImageUrl = stringFileName,
         });
 
@@ -69,29 +80,34 @@ public class PostController : Controller
         return RedirectToAction("Index", "Home"); // Folder 'Home', file 'Index'
     }
 
+    [Authorize]
     [HttpGet("edit/{id}")]
     public IActionResult EditPostPage(int id)
     {
         var post = this._context.Posts.FirstOrDefault(p => p.Id == id);
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (post == null)
         {
             return BadRequest("No existing post with this Id.");
         }
 
-        return View(new SinglePostViewModel
+        return View(new PostVM
         {
             Id = post.Id,
             Title = post.Title,
             Description = post.Description,
+            AppUserId = userId,
             // CurrentImage = post.CurrentImage,
         });
     }
 
+    [Authorize]
     [HttpPost("edit")]
-    public async Task<IActionResult> EditPost([FromForm] SinglePostViewModel _post)
+    public async Task<IActionResult> EditPost([FromForm] PostVM _post)
     {
         var post = this._context.Posts.FirstOrDefault(p => p.Id == _post.Id);
+        string displayName = _userManager.GetUserAsync(this.User).Result.DisplayName;
 
         if (post == null) return NotFound();
 
@@ -111,6 +127,8 @@ public class PostController : Controller
             Description = _post.Description,
             CurrentImage = stringFileName,
             DateCreated = DateTime.UtcNow,
+            AppUserId = _post.AppUserId,
+            DisplayName = displayName
         };
 
         if (_post.CurrentImage != null) // If a new image is posted, then update Images table with new image
@@ -118,6 +136,7 @@ public class PostController : Controller
             updatedPost.Images.Add(new Image
             {
                 ImageUrl = updatedPost.CurrentImage,
+                AppUserId = _post.AppUserId,
             });
         }
         
@@ -128,6 +147,7 @@ public class PostController : Controller
         return RedirectToAction("Index", "Home"); // Folder 'Home', file 'Index'
     }
 
+    [Authorize]
     [HttpGet("delete/{id}")]
     public async Task<IActionResult> DeletePost(int id)
     {
@@ -141,7 +161,7 @@ public class PostController : Controller
         {
             if (!img.ImageUrl.Contains("jk-placeholder-image.jpeg"))
             {
-                System.IO.File.Delete(Path.Combine(webHostEnvironment.WebRootPath, "images", img.ImageUrl));
+                System.IO.File.Delete(Path.Combine(_webHostEnvironment.WebRootPath, "images", img.ImageUrl));
             }
         }
 
@@ -151,13 +171,13 @@ public class PostController : Controller
         return RedirectToAction("Index", "Home"); // Folder 'Home', file 'Index'
     }
 
-    public string UploadFile(SinglePostViewModel vm)
+    public string UploadFile(PostVM vm)
     {
         string fileName = null;
 
         if (vm.CurrentImage != null)
         {
-            string uploadDir = Path.Combine(webHostEnvironment.WebRootPath, "images");
+            string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
             fileName = Guid.NewGuid().ToString() + "-" + vm.CurrentImage.FileName;
             string filePath = Path.Combine(uploadDir, fileName);
             using (var fileStream = new FileStream(filePath, FileMode.Create))

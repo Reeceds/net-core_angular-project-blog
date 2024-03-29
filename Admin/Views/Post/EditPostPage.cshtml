@@ -1,4 +1,4 @@
-﻿@model SinglePostViewModel;
+﻿@model PostVM;
 
 @{
     ViewData["Title"] = "Edit Post";
@@ -8,6 +8,7 @@
 
 <form class="col-md-7 col-lg-5 col-12" asp-controller="Post" asp-action="EditPost" method="post" enctype="multipart/form-data">
     <input asp-for="Id" type="hidden" />
+    <input asp-for="AppUserId" type="hidden" />
     <div class="mb-3">
         <label class="mb-2">Title</label>
         <input class="form-control" asp-for="Title">

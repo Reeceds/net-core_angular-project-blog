@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Admin;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,25 @@ builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlite("Data source=net-core_angular-project.db");
+});
+
+// ! Add for Identity user and role configuration e.g. password rules, remove 'options => {}' for no configuraiton
+builder.Services.AddIdentity<AppUser, IdentityRole>(
+    options =>
+    {
+        options.Password.RequiredUniqueChars = 0;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 5;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireLowercase = false;
+        options.User.RequireUniqueEmail = true;
+    }
+).AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+
+// ! Add for Identity redirect of path unauthorized routes
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Auth/Login";
 });
 
 // ! Add CORS

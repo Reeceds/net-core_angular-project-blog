@@ -1,6 +1,6 @@
 ﻿namespace Admin;
 
-public class SinglePostViewModel
+public class PostVM
 {
     public int Id { get; set; }
     public IFormFile CurrentImage { get; set; }
@@ -8,4 +8,5 @@ public class SinglePostViewModel
     public string Description { get; set; }
     public DateTime DateCreated { get; set; } = DateTime.UtcNow;
     public List<IFormFile> Images { get; set;}
+    public string AppUserId { get; set; }
 }

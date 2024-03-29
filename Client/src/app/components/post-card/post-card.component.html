@@ -1,4 +1,7 @@
-<a class="card mb-5 w-50" routerLink="/post/{{ blogPost?.id }}">
+<a
+  class="card mb-5 col-12 col-sm-6 col-md 5"
+  routerLink="/post/{{ blogPost?.id }}"
+>
   <img
     src="http://localhost:5035/images/{{ blogPost?.currentImage }}"
     class="card-img-top"
@@ -6,6 +9,11 @@
   />
   <div class="card-body">
     <h5 class="card-title">{{ blogPost?.title }}</h5>
+    <p class="text-secondary mb-1" style="font-size: 0.75rem">
+      Created by: <b>{{ blogPost?.displayName }}</b>
+      <br />
+      Date posted: <b>{{ blogPost?.dateCreated | date : "dd-MM-yyyy" }}</b>
+    </p>
     <p class="card-text truncate">{{ blogPost?.description }}</p>
   </div>
 </a>
