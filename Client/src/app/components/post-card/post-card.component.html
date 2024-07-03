@@ -1,7 +1,11 @@
 <a
   class="card mb-5 col-12 col-sm-6 col-md 5"
-  routerLink="/post/{{ blogPost?.id }}"
+  [routerLink]="['/post', blogPost?.id]"
 >
+  <!-- <a
+  class="card mb-5 col-12 col-sm-6 col-md 5"
+  routerLink="/post/{{ blogPost?.id }}"
+> -->
   <img
     src="http://localhost:5035/images/{{ blogPost?.currentImage }}"
     class="card-img-top"
